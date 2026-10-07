@@ -1,43 +1,36 @@
 <!DOCTYPE html>
-<html lang="es" style="margin:0;padding:0;min-height:100%;width:100%;">
+<html lang="es" style="margin:0;padding:0;height:100%;width:100%;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Flota y Equipos</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; background:#f4f6f8; color:#243342; }
-    header { min-height:58px; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#25313e; color:white; box-shadow:0 2px 5px #0002; }
-    .brand { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:650; }
-    #db-badge { border:1px solid #4f6378; background:#384a5d; color:#9bd0ff; border-radius:14px; padding:4px 9px; font-size:12px; font-weight:600; }
-    nav { display:flex; flex-wrap:wrap; gap:7px; align-items:center; }
-    button, select { min-height:36px; border:1px solid #ffffff55; border-radius:5px; padding:7px 12px; color:#e9eef3; background:#ffffff12; font-size:13px; font-weight:600; cursor:pointer; }
-    button[aria-selected="true"] { color:white; background:#0076ce; border-color:#0076ce; }
-    select { color:#243342; background:white; border-color:#b8c2cc; }
-    main { height:calc(100vh - 58px); min-height:420px; }
-    iframe { display:block; width:100%; height:100%; border:0; background:white; }
-    @media (max-width:640px) { header { align-items:flex-start; } nav { width:100%; } button { flex:1; } }
-  </style>
 </head>
-<body>
-  <header>
-    <div class="brand">Gestión de Flota y Equipos <span id="db-badge">BD: Cargando…</span></div>
-    <nav aria-label="Secciones del add-in">
-      <button id="form-request" data-view="request" aria-selected="true">Solicitud de equipos</button>
-      <button id="form-movement" data-view="movement" aria-selected="false">Registrar movimiento</button>
-      <button id="sheet-view" data-view="sheet" aria-selected="false">Base de datos</button>
-      <select id="sheet-tab" aria-label="Pestaña de la hoja" hidden></select>
-    </nav>
-  </header>
-  <main><iframe id="content-frame" title="Contenido de Gestión de Flota y Equipos" allow="clipboard-read; clipboard-write"></iframe></main>
+<body style="margin:0;padding:0;width:100%;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background-color:#f5f6f8;box-sizing:border-box;">
+  <div id="addin-main-wrapper" style="width:100%;min-height:100vh;height:100vh;display:flex;flex-direction:column;margin:0;padding:0;box-sizing:border-box;overflow:hidden;">
+    <div id="addin-header-bar" style="background-color:#25313e;color:#ffffff;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;box-shadow:0 2px 4px rgba(0,0,0,0.15);box-sizing:border-box;min-height:50px;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+        <span style="font-size:14px;font-weight:600;color:#ffffff;letter-spacing:0.2px;">Gestión de Flota y Equipos</span>
+        <span id="db-badge" style="background-color:#384a5d;color:#64b5f6;padding:3px 9px;border-radius:12px;font-size:12px;font-weight:600;border:1px solid #4f6378;">BD: Cargando…</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <button id="form-request" data-view="request" aria-pressed="true" style="background-color:#0076ce;color:#ffffff;border:1px solid #0076ce;padding:7px 11px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;outline:none;white-space:nowrap;">Solicitud de equipos</button>
+        <button id="form-movement" data-view="movement" aria-pressed="false" style="background-color:rgba(255,255,255,0.1);color:#e0e0e0;border:1px solid rgba(255,255,255,0.25);padding:7px 11px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;outline:none;white-space:nowrap;">Registrar movimiento</button>
+        <button id="sheet-view" data-view="sheet" aria-pressed="false" style="background-color:rgba(255,255,255,0.1);color:#e0e0e0;border:1px solid rgba(255,255,255,0.25);padding:7px 11px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;outline:none;white-space:nowrap;">Base de datos</button>
+        <select id="sheet-tab" aria-label="Pestaña de la hoja" style="display:none;max-width:190px;height:32px;border:1px solid #b8c2cc;border-radius:4px;padding:4px 7px;color:#243342;background-color:#ffffff;font-size:12px;">
+        </select>
+      </div>
+    </div>
+    <div id="addin-content-area" style="width:100%;flex:1;min-height:0;height:auto;margin:0;padding:0;box-sizing:border-box;overflow:hidden;">
+      <iframe id="content-frame" title="Contenido de Gestión de Flota y Equipos" src="https://docs.google.com/forms/d/e/1FAIpQLScMM5lH-fuFvI_LRRpTixbrHlv3TPMmbTpy3-2ZsG5qdKLZZw/viewform?embedded=true" style="width:100% !important;height:100% !important;min-height:0 !important;border:0 !important;margin:0 !important;padding:0 !important;display:block !important;background-color:#ffffff;" allow="clipboard-read; clipboard-write"></iframe>
+    </div>
+  </div>
+
   <script>
-    // Add-in independiente: no modifica el add-in de Gestión de Trabajos.
     const FORMS = {
       request: 'https://docs.google.com/forms/d/e/1FAIpQLScMM5lH-fuFvI_LRRpTixbrHlv3TPMmbTpy3-2ZsG5qdKLZZw/viewform?embedded=true',
       movement: 'https://docs.google.com/forms/d/e/1FAIpQLScUEld2hfs-dVPxXu-UOjPDmKFdU0UdkFEhfPPRNAZ3TTZ4rw/viewform?embedded=true'
     };
     const SPREADSHEET_ID = '1ZW_buZY3C_vx8jcgQW_27us3BZB77NBhDOsfbK0rgCU';
-    // Deja vacío hasta verificar el ID de la pregunta de base de datos del formulario.
     const DATABASE_ENTRY_ID = '';
     const SHEET_TABS = [
       { name: 'Panel de Control', gid: '233803455' },
@@ -55,49 +48,63 @@
     let databaseName = '';
 
     function sheetUrl(gid) {
-      return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?gid=${encodeURIComponent(gid)}#gid=${encodeURIComponent(gid)}`;
-    }
-    function applyDatabase(name) {
-      databaseName = name || 'Desconocida';
-      document.getElementById('db-badge').textContent = `BD: ${databaseName}`;
-      if (activeView === 'request') {
-        frame.src = requestFormUrl();
-      }
+      return 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/edit?gid=' + encodeURIComponent(gid) + '#gid=' + encodeURIComponent(gid);
     }
     function requestFormUrl() {
       if (!DATABASE_ENTRY_ID) return FORMS.request;
-      const separator = FORMS.request.includes('?') ? '&' : '?';
-      return `${FORMS.request}${separator}${encodeURIComponent(DATABASE_ENTRY_ID)}=${encodeURIComponent(databaseName)}`;
+      return FORMS.request + '&' + encodeURIComponent(DATABASE_ENTRY_ID) + '=' + encodeURIComponent(databaseName);
+    }
+    function applyDatabase(name) {
+      databaseName = name || 'Desconocida';
+      document.getElementById('db-badge').innerText = 'BD: ' + databaseName;
+      if (activeView === 'request') frame.src = requestFormUrl();
+    }
+    function setButtonState(button, selected) {
+      button.setAttribute('aria-pressed', String(selected));
+      button.style.backgroundColor = selected ? '#0076ce' : 'rgba(255,255,255,0.1)';
+      button.style.borderColor = selected ? '#0076ce' : 'rgba(255,255,255,0.25)';
+      button.style.color = selected ? '#ffffff' : '#e0e0e0';
     }
     function setView(view) {
       activeView = view;
-      document.querySelectorAll('nav button').forEach(button => {
-        button.setAttribute('aria-selected', String(button.dataset.view === view));
+      document.querySelectorAll('#addin-header-bar button').forEach(function (button) {
+        setButtonState(button, button.getAttribute('data-view') === view);
       });
-      selector.hidden = view !== 'sheet';
-      if (view === 'request') {
-        frame.src = requestFormUrl();
-      } else if (view === 'movement') {
-        frame.src = FORMS.movement;
-      } else {
-        frame.src = sheetUrl(selector.value || SHEET_TABS[0].gid);
-      }
+      selector.style.display = view === 'sheet' ? 'block' : 'none';
+      if (view === 'request') frame.src = requestFormUrl();
+      else if (view === 'movement') frame.src = FORMS.movement;
+      else frame.src = sheetUrl(selector.value || SHEET_TABS[0].gid);
     }
-    SHEET_TABS.forEach((tab, index) => selector.add(new Option(tab.name, tab.gid, index === 0, index === 0)));
-    document.querySelectorAll('nav button').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
-    selector.addEventListener('change', () => { if (activeView === 'sheet') frame.src = sheetUrl(selector.value); });
 
-    geotab.addin.fleetEquipment = function (api, initialState) {
+    SHEET_TABS.forEach(function (tab, index) {
+      selector.add(new Option(tab.name, tab.gid, index === 0, index === 0));
+    });
+    document.querySelectorAll('#addin-header-bar button').forEach(function (button) {
+      button.onclick = function () { setView(button.getAttribute('data-view')); };
+    });
+    selector.onchange = function () {
+      if (activeView === 'sheet') frame.src = sheetUrl(selector.value);
+    };
+
+    geotab.addin.fleetEquipment = function (api, state) {
       return {
         initialize: function (api, state, callback) {
-          const db = (state && state.database) || (initialState && initialState.database);
-          if (db) { applyDatabase(db); callback(); return; }
-          if (api && typeof api.getSession === 'function') {
-            api.getSession(function (session) { applyDatabase(session && session.database); callback(); });
-          } else { applyDatabase('Desconocida'); callback(); }
+          const db = (state && state.database) ? state.database : null;
+          if (db) {
+            applyDatabase(db);
+            callback();
+          } else if (api && typeof api.getSession === 'function') {
+            api.getSession(function (session) {
+              applyDatabase(session && session.database ? session.database : 'Desconocida');
+              callback();
+            });
+          } else {
+            applyDatabase('Desconocida');
+            callback();
+          }
         },
-        focus: function () {},
-        blur: function () {}
+        focus: function (api, state) {},
+        blur: function (api, state) {}
       };
     };
   </script>
